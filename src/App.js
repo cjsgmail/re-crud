@@ -1,73 +1,62 @@
-import './App.css';
-import dummy from './Data/dummyData';
-import { useState } from 'react';
-
+import "./App.css";
+import dummy from "./Data/dummyData";
+import { useState } from "react";
+import Create from "./Pages/Create";
+import List from "./Pages/List";
+import styled from "styled-components";
 
 function App() {
-  
-  const [mode, setMode] = useState(false)
-  const [data, setData] = useState(dummy)
-  const [nextId, setNextId] = useState(data.length + 1)
+  const [mode, setMode] = useState(false);
+  const [data, setData] = useState(dummy);
+  const [nextId, setNextId] = useState(data.length + 1);
 
   const handleCreate = (e) => {
-    setMode(!mode)
-  }
+    setMode(!mode);
+  };
 
-  
   return (
     <div className="App">
-      <Header title="CRUD프로젝트"/>
-      <Nav props={data} mode={mode} handleCreate={handleCreate}/>
-      <button onClick={handleCreate}>글쓰기</button>
-      <button>글삭제</button>
-      {mode ? <Create onCreate={(content, title, username)=>{
-        const newData = {
-          id:nextId, 
-          content:content,
-          title:title,
-          username:username,
-          date: new Date()
-        }
-        setData([newData, ...data])
-        setNextId(nextId + 1)
-      }}/> : null}
+      <Header>게시판</Header>
+      <List data={data} />
+      <Button onClick={handleCreate}>글쓰기</Button>
+      {mode ? (
+        <Create
+          onCreate={(content, title, username) => {
+            if (!content || !title || !username) {
+              alert("공란 없이 입력해주세요!");
+              return;
+            }
+            const newData = {
+              id: nextId,
+              content: content,
+              title: title,
+              username: username,
+              createdAt: new Date().toLocaleDateString(),
+            };
+            setData([newData, ...data]);
+            setNextId(nextId + 1);
+          }}
+        />
+      ) : null}
     </div>
   );
 }
 
-function Header(props) {
-  return <header>
-  <h1>{props.title}</h1>
-</header>
-}
+const Header = styled.header`
+  background-color: #495057;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #ced4da;
+`;
 
-function Nav({props}) {
-  
-
-  return <nav>
-    {props.map((el)=>{
-      return <ul key={el.id}>
-          <li>{el.id}</li> 
-          <li>{el.title}</li>
-          <li>{el.username}</li>
-        </ul>
-    })}
-</nav>
-}
-
-function Create(props){
-  return <form onSubmit={event=>{
-    event.preventDefault();
-    const content = event.target.content.value
-    const title = event.target.title.value
-    const username = event.target.username.value
-    props.onCreate(content,title,username);
-  }}>
-    <p><textarea name="content" placeholder="내용을 입력하세요"></textarea></p>
-    <p><input name='title' type="text" placeholder="제목을 입력하세요"></input></p>
-    <p><input name='username' type="text" placeholder="닉네임을 입력하세요"></input></p>
-    <p><input type="submit"></input></p>
-  </form>
-}
+const Button = styled.button`
+  cursor: pointer;
+  border: solid 1px #f1f3f5;
+  margin-top: 1rem;
+  margin-left: 1rem;
+`;
 
 export default App;
