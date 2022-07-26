@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="App">
       <Header>게시판</Header>
-      <List data={data} />
+      <List data={data} setData={setData} />
       <Button onClick={handleCreate}>글쓰기</Button>
       {mode ? (
         <Create

@@ -28,13 +28,13 @@ BlueTitle.args = {
 export const BlackTitle = Template.bind({});
 
 BlackTitle.args = {
-  title: "Blue Title",
+  title: "Black Title",
   textColor: "black",
 };
 
 export const GrayTitle = Template.bind({});
 
 GrayTitle.args = {
-  title: "Blue Title",
+  title: "Gray Title",
   textColor: "gray",
 };
